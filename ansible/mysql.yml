@@ -1,0 +1,70 @@
+---
+
+#
+# Copyright (c) 2015 Davide Guerri <davide.guerri@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+# implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+- name: Start up MySQL docker container
+  hosts: localhost
+
+  tasks:
+    - name: Start MySQL container
+      docker: >
+        image=base-image
+        name=mysql
+        hostname=mysql
+        detach=yes
+        tty=yes
+        tls_client_cert=/Users/davide/Developer/docker/.docker/cert.pem
+        tls_client_key=/Users/davide/Developer/docker/.docker/key.pem
+        tls_ca_cert=/Users/davide/Developer/docker/.docker/ca.pem
+        tls_verify=true
+        tls_assert_hostname=false
+        docker_url=https://{{ docker_host_ip }}:2376
+
+    - name: Add MySQL host to inventory
+      add_host: name=mysql
+
+- name: Configure MySQL
+  hosts: mysql
+  connection: docker
+
+  pre_tasks:
+    - name: Update apt cache
+      apt: update_cache=yes cache_valid_time=7200
+
+  roles:
+    - role: mysql
+      mysql_root_password: "{{ MYSQL_ROOT }}"
+      mysql_bind_address: 0.0.0.0
+      mysql_character_set_server: "utf8"
+      mysql_collation_server: "utf8_general_ci"
+      mysql_innodb_file_per_table: "innodb_file_per_table"
+      mysql_databases:
+        - name: "{{ MYSQL_KEYSTONE_DB }}"
+          collation: "utf8_general_ci"
+          encoding: "utf8"
+      mysql_users:
+        - name: "{{ MYSQL_KEYSTONE_USER }}"
+          pass: "{{ MYSQL_KEYSTONE_PASS }}"
+          priv: "{{ MYSQL_KEYSTONE_DB }}.*:ALL,GRANT"
+          host: "%"
+    - role: runit
+      runit_services:
+        - name: mysql
+          command: |
+            start-stop-daemon --start --name mysql \
+              --exec /usr/bin/mysqld_safe
