@@ -60,7 +60,8 @@
       mysql_users:
         - name: "{{ MYSQL_KEYSTONE_USER }}"
           pass: "{{ MYSQL_KEYSTONE_PASS }}"
-          priv: "{{ MYSQL_KEYSTONE_DB }}.*:ALL,GRANT"
+          priv: "{{ MYSQL_KEYSTONE_DB }}.*:ALL"
+          host: "%"
           host: "%"
     - role: runit
       runit_services:
