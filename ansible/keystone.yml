@@ -84,9 +84,9 @@
           internal_url: "http://keystone:5000/v2.0"
           admin_url: "http://keystone:35357/v2.0"
         - service_name: glance
-          public_url: "http://glance:5000/v2.0"
-          internal_url: "http://glance:5000/v2.0"
-          admin_url: "http://glance:35357/v2.0"
+          public_url: "http://glance:9292/"
+          internal_url: "http://glance:9292/"
+          admin_url: "http://glance:9292/"
 
     - role: runit
       runit_services:
