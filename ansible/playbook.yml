@@ -20,3 +20,4 @@
 - include: mysql.yml
 - include: keystone.yml
 - include: rabbitmq.yml
+- include: glance.yml

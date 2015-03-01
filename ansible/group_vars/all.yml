@@ -20,14 +20,16 @@ MYSQL_KEYSTONE_DB: "keystone"
 MYSQL_KEYSTONE_USER: "keystone"
 MYSQL_KEYSTONE_PASS: "ahleisheeW0va4datush"
 
+# Database configuration of Image service
+MYSQL_GLANCE_DB: "glance"
+MYSQL_GLANCE_USER: "glance"
+MYSQL_GLANCE_PASS: "aiChohgailangaeBoo0V"
+
 # Password of user demo
 DEMO_PASS: "oosahd6ohz8eixooNgae"
 
 # Password of user admin
 ADMIN_PASS: "dae9ai3ohboo8Phiesoh"
-
-# Database password for Image Service
-GLANCE_DBPASS: "aiChohgailangaeBoo0V"
 
 # Password of Image Service user glance
 GLANCE_PASS: "oapimig8thuCai2aZ6ye"
