@@ -25,7 +25,7 @@
       docker: >
         image=base-image
         name=mysql
-        hostname=mysql
+        hostname={{ DATABASE_HOSTNAME }}
         detach=yes
         tty=yes
         tls_client_cert=/Users/davide/Developer/docker/.docker/cert.pem

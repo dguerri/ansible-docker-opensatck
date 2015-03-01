@@ -25,7 +25,7 @@
       docker: >
         image=base-image
         name=keystone
-        hostname=keystone
+        hostname={{ KEYSTONE_HOSTNAME }}
         links=mysql:{{ DATABASE_HOSTNAME }}
         detach=yes
         tty=yes

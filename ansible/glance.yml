@@ -25,8 +25,8 @@
       docker: >
         image=base-image
         name=glance
-        hostname=glance
-        links=mysql:{{ DATABASE_HOSTNAME }},keystone:keystone
+        hostname={{ GLANCE_HOSTNAME }}
+        links=mysql:{{ DATABASE_HOSTNAME }},keystone:{{ KEYSTONE_HOSTNAME }},rabbitmq:{{ AMQP_HOSTNAME }}
         detach=yes
         tty=yes
         tls_client_cert=/Users/davide/Developer/docker/.docker/cert.pem
@@ -66,8 +66,8 @@
       glance_database_url: "mysql://{{ MYSQL_GLANCE_USER }}:{{ MYSQL_GLANCE_PASS }}@{{ DATABASE_HOSTNAME }}/{{ MYSQL_GLANCE_DB }}"
       glance_hostname: glance
       glance_pass: "{{ GLANCE_PASS }}"
-      keystone_hostname: keystone
-      rabbit_hostname: rabbitmq
+      keystone_hostname: "{{ KEYSTONE_HOSTNAME }}"
+      rabbit_hostname: "{{ AMQP_HOSTNAME }}"
       rabbit_username: glance
       rabbit_pass: "{{ RABBIT_GLANCE_PASS }}"
 

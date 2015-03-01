@@ -26,7 +26,7 @@
       docker: >
         image=base-image
         name=rabbitmq
-        hostname=rabbitmq
+        hostname={{ AMQP_HOSTNAME }}
         detach=yes
         tty=yes
         tls_client_cert=/Users/davide/Developer/docker/.docker/cert.pem
