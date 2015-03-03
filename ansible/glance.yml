@@ -70,7 +70,7 @@
       glance_port: "{{ GLANCE_PORT }}"
       keystone_hostname: "{{ KEYSTONE_HOSTNAME }}"
       rabbit_hostname: "{{ AMQP_HOSTNAME }}"
-      rabbit_username: glance
+      rabbit_username: openstack-glance
       rabbit_pass: "{{ RABBIT_GLANCE_PASS }}"
 
     - role: runit
