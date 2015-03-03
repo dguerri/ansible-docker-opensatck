@@ -26,6 +26,7 @@
         image=base-image
         name=glance
         hostname={{ GLANCE_HOSTNAME }}
+        expose={{ GLANCE_PORT }}
         links=mysql:{{ DATABASE_HOSTNAME }},keystone:{{ KEYSTONE_HOSTNAME }},rabbitmq:{{ AMQP_HOSTNAME }}
         detach=yes
         tty=yes
@@ -66,6 +67,7 @@
       glance_database_url: "mysql://{{ MYSQL_GLANCE_USER }}:{{ MYSQL_GLANCE_PASS }}@{{ DATABASE_HOSTNAME }}/{{ MYSQL_GLANCE_DB }}"
       glance_hostname: glance
       glance_pass: "{{ GLANCE_PASS }}"
+      glance_port: "{{ GLANCE_PORT }}"
       keystone_hostname: "{{ KEYSTONE_HOSTNAME }}"
       rabbit_hostname: "{{ AMQP_HOSTNAME }}"
       rabbit_username: glance

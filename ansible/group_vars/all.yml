@@ -1,41 +1,45 @@
 ---
 
-# Hostnames
+# MySQL
 DATABASE_HOSTNAME: "mysql"
-KEYSTONE_HOSTNAME: "keystone"
-AMQP_HOSTNAME: "rabbitmq"
-GLANCE_HOSTNAME: "glance"
 
-# Root password for the database
 MYSQL_ROOT: "aexigheefeiph6hae3Ke"
 
-# Passwords for RabbitMQ users
+# RabbitMQ
+AMQP_HOSTNAME: "rabbitmq"
+
 RABBIT_GLANCE_PASS: "Uawaiyiz6tee7chietoC"
 RABBIT_NOVA_PASS: "Mie0ohd9eizei8oChu9V"
 RABBIT_NOVA_PASS: "Zuu1aabaewoh5tei2agh"
 RABBIT_NEUTRON_PASS: "seiye6Ekah1hoxeshook"
 
-# Admin Token
-ADMIN_TOKEN: "rahveiRenai2aefez2oboiyahthoot"
+# Keystone
+KEYSTONE_HOSTNAME: "keystone"
 
-# Database configuration of Identity service
 MYSQL_KEYSTONE_DB: "keystone"
 MYSQL_KEYSTONE_USER: "keystone"
 MYSQL_KEYSTONE_PASS: "ahleisheeW0va4datush"
 
-# Database configuration of Image service
+KEYSTONE_PORT: 5000
+KEYSTONE_ADMIN_PORT: 35357
+
+ADMIN_TOKEN: "rahveiRenai2aefez2oboiyahthoot"
+DEMO_PASS: "oosahd6ohz8eixooNgae"
+ADMIN_PASS: "dae9ai3ohboo8Phiesoh"
+
+# Glance
+GLANCE_HOSTNAME: "glance"
+
 MYSQL_GLANCE_DB: "glance"
 MYSQL_GLANCE_USER: "glance"
 MYSQL_GLANCE_PASS: "aiChohgailangaeBoo0V"
 
-# Password of user demo
-DEMO_PASS: "oosahd6ohz8eixooNgae"
+GLANCE_PORT: 9292
 
-# Password of user admin
-ADMIN_PASS: "dae9ai3ohboo8Phiesoh"
-
-# Password of Image Service user glance
 GLANCE_PASS: "oapimig8thuCai2aZ6ye"
+
+
+
 
 # Database password for nova
 NOVA_DBPASS: "peeh7shuy8Iesh8Ce5aj"
