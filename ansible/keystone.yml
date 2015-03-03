@@ -74,13 +74,16 @@
         - { name: admin, password: "{{ ADMIN_PASS }}", tenant: admin }
         - { name: demo, password: "{{ DEMO_PASS }}", tenant: demo }
         - { name: glance, password: "{{ GLANCE_PASS }}", tenant: service }
+        - { name: neutron, password: "{{ NEUTRON_PASS }}", tenant: service }
       keystone_roles:
         - { name: admin, user: admin, tenant: admin }
         - { name: _member_, user: demo, tenant: demo  }
         - { name: admin, user: glance, tenant: service  }
+        - { name: admin, user: neutron, tenant: service  }
       keystone_services:
         - { name: keystone, service_type: identity }
         - { name: glance, service_type: image }
+        - { name: neutron, service_type: network }
       keystone_endpoints:
         - service_name: keystone
           public_url: "http://{{ KEYSTONE_HOSTNAME}}:{{ KEYSTONE_PORT }}/v2.0"
@@ -90,6 +93,10 @@
           public_url: "http://{{ GLANCE_HOSTNAME}}:{{ GLANCE_PORT }}/"
           internal_url: "http://{{ GLANCE_HOSTNAME}}:{{ GLANCE_PORT }}/"
           admin_url: "http://{{ GLANCE_HOSTNAME}}:{{ GLANCE_PORT }}/"
+        - service_name: neutron
+          public_url: "http://{{ NEUTRON_HOSTNAME}}:{{ NEUTRON_PORT }}/"
+          internal_url: "http://{{ NEUTRON_HOSTNAME}}:{{ NEUTRON_PORT }}/"
+          admin_url: "http://{{ NEUTRON_HOSTNAME}}:{{ NEUTRON_PORT }}/"
 
     - role: runit
       runit_services:

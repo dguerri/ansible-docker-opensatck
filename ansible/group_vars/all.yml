@@ -38,7 +38,16 @@ GLANCE_PORT: 9292
 
 GLANCE_PASS: "oapimig8thuCai2aZ6ye"
 
+# Neutron
+NEUTRON_HOSTNAME: "neutron"
 
+MYSQL_NEUTRON_DB: "neutron"
+MYSQL_NEUTRON_USER: "neutron"
+MYSQL_NEUTRON_PASS: "mahxieJahku9teihie4o"
+
+NEUTRON_PORT: 9696
+
+NEUTRON_PASS: "ohghiew9eepeeP5vah4S"
 
 
 # Database password for nova
@@ -49,12 +58,6 @@ NOVA_PASS: "EeQuoh7eiXeingialee5"
 
 # Metadata shared secret
 METADATA_SECRET: "uuD7Queip0peehohth0e"
-
-# Password of Networking service user neutron
-NEUTRON_PASS: "ohghiew9eepeeP5vah4S"
-
-# Database password for the Networking service
-NEUTRON_DBPASS: "mahxieJahku9teihie4o"
 
 # Nova hypervisor to use (only kvm/qemu are currently supported)
 NOVA_VIRT_TYPE: "kvm"

@@ -19,3 +19,6 @@
 [submodule "ansible/roles/openstack-glance"]
 	path = ansible/roles/openstack-glance
 	url = https://github.com/dguerri/openstack-glance.git
+[submodule "ansible/roles/openstack-neutron_server"]
+	path = ansible/roles/openstack-neutron_server
+	url = https://github.com/dguerri/openstack-neutron_server.git

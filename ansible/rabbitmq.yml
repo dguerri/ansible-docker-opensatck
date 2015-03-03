@@ -49,6 +49,8 @@
 
   roles:
     - role: rabbitmq
+      rabbitmq_conf_tcp_listeners_address: 0.0.0.0
+      rabbitmq_os_package: true
       rabbitmq_ssl: false
       rabbitmq_users_definitions:
         - vhost   : /
