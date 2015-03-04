@@ -83,3 +83,4 @@
           command: |
             start-stop-daemon --start --name mysql \
               --exec /usr/bin/mysqld_safe
+          state: stopped

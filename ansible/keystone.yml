@@ -107,3 +107,4 @@
             start-stop-daemon --start --chuid keystone \
               --chdir /var/lib/keystone --name keystone \
               --exec /usr/bin/keystone-all
+          state: stopped

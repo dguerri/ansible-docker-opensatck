@@ -69,4 +69,4 @@
           command: |
             start-stop-daemon --quiet \
               --chuid rabbitmq --start --exec /usr/sbin/rabbitmq-server
-
+          state: stopped

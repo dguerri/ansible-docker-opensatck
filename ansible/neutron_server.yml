@@ -79,3 +79,4 @@
             start-stop-daemon --start --chuid neutron \
               --chdir /var/lib/neutron-server --name neutron-server \
               --exec /usr/bin/neutron-server
+          state: stopped

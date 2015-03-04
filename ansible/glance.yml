@@ -82,8 +82,10 @@
             start-stop-daemon --start --chuid glance \
               --chdir /var/lib/glance --name glance-api \
               --exec /usr/bin/glance-api
+          state: stopped
         - name: glance-registry
           command: |
             start-stop-daemon --start --chuid glance \
               --chdir /var/lib/glance --name glance-registry \
               --exec /usr/bin/glance-registry
+          state: stopped

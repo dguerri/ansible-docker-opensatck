@@ -40,3 +40,8 @@
     group=root
     mode=0755
   with_items: runit_services
+
+- name: Stop runit services if required
+  command: "sv stop {{ item.name }}"
+  when: item.state == 'stopped'
+  with_items: runit_services
