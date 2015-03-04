@@ -30,11 +30,11 @@
         ports=0.0.0.0:{{ NEUTRON_PORT }}:{{ NEUTRON_PORT }}
         detach=yes
         tty=yes
+        use_tls=custom
         tls_client_cert=../.docker/cert.pem
         tls_client_key=../.docker/key.pem
         tls_ca_cert=../.docker/ca.pem
-        tls_verify=true
-        tls_assert_hostname=false
+        tls_verify_hostname=false
         docker_url=https://{{ docker_host_ip }}:2376
 # Links are no longer required as we have auto-dns
 #        links=mysql:{{ DATABASE_HOSTNAME }},keystone:{{ KEYSTONE_HOSTNAME }},rabbitmq:{{ AMQP_HOSTNAME }}

@@ -29,11 +29,11 @@
         expose=3306
         detach=yes
         tty=yes
+        use_tls=custom
         tls_client_cert=../.docker/cert.pem
         tls_client_key=../.docker/key.pem
         tls_ca_cert=../.docker/ca.pem
-        tls_verify=true
-        tls_assert_hostname=false
+        tls_verify_hostname=false
         docker_url=https://{{ docker_host_ip }}:2376
 
     - name: Add MySQL host to inventory
