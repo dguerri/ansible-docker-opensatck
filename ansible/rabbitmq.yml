@@ -21,12 +21,12 @@
   hosts: localhost
 
   tasks:
-
     - name: start rabbitmq container
       docker: >
         image=base-image
         name=rabbitmq
         hostname={{ AMQP_HOSTNAME }}
+        expose=5672
         detach=yes
         tty=yes
         tls_client_cert=../.docker/cert.pem

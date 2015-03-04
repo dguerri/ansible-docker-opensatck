@@ -12,7 +12,7 @@ fi
 export VAGRANT_DEFAULT_PROVIDER=parallels
 
 vagrant destroy -f
-vagrant up --no-provision
+vagrant up
 
 . .env
 

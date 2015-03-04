@@ -17,6 +17,7 @@
 # limitations under the License.
 #
 
+- include: autodns.yml
 - include: mysql.yml
 - include: keystone.yml
 - include: rabbitmq.yml

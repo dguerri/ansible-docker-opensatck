@@ -27,7 +27,7 @@
         name=glance
         hostname={{ GLANCE_HOSTNAME }}
         expose={{ GLANCE_PORT }}
-        links=mysql:{{ DATABASE_HOSTNAME }},keystone:{{ KEYSTONE_HOSTNAME }},rabbitmq:{{ AMQP_HOSTNAME }}
+        ports=0.0.0.0:{{ GLANCE_PORT }}:{{ GLANCE_PORT }}
         detach=yes
         tty=yes
         tls_client_cert=../.docker/cert.pem
@@ -36,6 +36,8 @@
         tls_verify=true
         tls_assert_hostname=false
         docker_url=https://{{ docker_host_ip }}:2376
+# Links are no longer required as we have auto-dns
+#        links=mysql:{{ DATABASE_HOSTNAME }},keystone:{{ KEYSTONE_HOSTNAME }},rabbitmq:{{ AMQP_HOSTNAME }}
 
     - name: Add Keystone host to inventory
       add_host: name=glance

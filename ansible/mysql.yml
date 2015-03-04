@@ -26,6 +26,7 @@
         image=base-image
         name=mysql
         hostname={{ DATABASE_HOSTNAME }}
+        expose=3306
         detach=yes
         tty=yes
         tls_client_cert=../.docker/cert.pem
