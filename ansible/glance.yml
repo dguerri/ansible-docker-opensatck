@@ -67,7 +67,7 @@
   roles:
     - role: openstack-glance
       glance_database_url: "mysql://{{ MYSQL_GLANCE_USER }}:{{ MYSQL_GLANCE_PASS }}@{{ DATABASE_HOSTNAME }}/{{ MYSQL_GLANCE_DB }}"
-      glance_hostname: glance
+      glance_hostname: "{{ GLANCE_HOSTNAME }}"
       glance_pass: "{{ GLANCE_PASS }}"
       glance_port: "{{ GLANCE_PORT }}"
       keystone_hostname: "{{ KEYSTONE_HOSTNAME }}"

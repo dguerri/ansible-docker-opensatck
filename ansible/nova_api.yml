@@ -1,0 +1,90 @@
+---
+
+#
+# Copyright (c) 2015 Davide Guerri <davide.guerri@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+# implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+- name: Start up Nova API docker container
+  hosts: localhost
+
+  tasks:
+    - name: Start Nova API container
+      docker: >
+        image=base-image
+        name=nova-api
+        hostname={{ NOVA_API_HOSTNAME }}
+        expose={{ NOVA_API_PORT }},{{ NOVA_API_METADATA_PORT }}
+        ports=0.0.0.0:{{ NOVA_API_PORT }}:{{ NOVA_API_PORT }}
+        privileged=yes
+        detach=yes
+        tty=yes
+        tls_client_cert=../.docker/cert.pem
+        tls_client_key=../.docker/key.pem
+        tls_ca_cert=../.docker/ca.pem
+        tls_verify=true
+        tls_assert_hostname=false
+        docker_url=https://{{ docker_host_ip }}:2376
+# Links are no longer required as we have auto-dns
+#        links=mysql:{{ DATABASE_HOSTNAME }}
+
+    - name: Add Nova API host to inventory
+      add_host: name=nova-api
+
+- name: Configure Nova API
+  hosts: nova-api
+  connection: docker
+
+  pre_tasks:
+    - name: update apt cache
+      apt: update_cache=yes cache_valid_time=7200
+
+    - name: install python-mysqldb
+      apt: name="python-mysqldb" state=present
+
+    - name: provide a fake SysV init script for configuring nova-api
+      copy: >
+        src=files/nova-api
+        dest=/etc/init.d/nova-api
+        owner=root
+        group=root
+        mode=0755
+
+  roles:
+    - role: openstack-nova_api
+      rabbit_username: "openstack-nova"
+      rabbit_pass: "{{ RABBIT_NOVA_PASS }}"
+      metadata_secret: "{{ METADATA_SECRET }}"
+      nova_api_protocol: "{{ NOVA_API_PROTOCOL }}"
+      nova_api_hostname: "{{ NOVA_API_HOSTNAME }}"
+      nova_api_port: "{{ NOVA_API_PORT }}"
+      metadata_port: "{{ NOVA_API_METADATA_PORT }}"
+      nova_pass: "{{ NOVA_PASS }}"
+      glance_protocol: "{{ GLANCE_PROTOCOL }}"
+      glance_host: "{{ GLANCE_HOST }}"
+      glance_port: "{{ GLANCE_PORT }}"
+      neutron_protocol: "{{ NEUTRON_PROTOCOL }}"
+      neutron_host: "{{ NEUTRON_HOST }}"
+      neutron_port: "{{ NEUTRON_PORT }}"
+      neutron_pass: "{{ NEUTRON_PASS }}"
+
+    - role: runit
+      runit_services:
+        - name: nova-api
+          command: |
+            start-stop-daemon --start --chuid nova \
+              --chdir /var/lib/nova --name nova-api \
+              --exec /usr/bin/nova-api
+          state: stopped

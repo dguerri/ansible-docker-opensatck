@@ -64,7 +64,7 @@
   roles:
     - role: openstack-keystone
       keystone_database_url: "mysql://{{ MYSQL_KEYSTONE_USER }}:{{ MYSQL_KEYSTONE_PASS }}@{{ DATABASE_HOSTNAME }}/{{ MYSQL_KEYSTONE_DB }}"
-      keystone_hostname: "keystone"
+      keystone_hostname: "{{ KEYSTONE_HOSTNAME }}"
       keystone_port: "{{ KEYSTONE_PORT }}"
       keystone_admin_port: "{{ KEYSTONE_ADMIN_PORT }}"
       keystone_admin_token: "{{ ADMIN_TOKEN }}"
@@ -77,28 +77,36 @@
         - { name: demo, password: "{{ DEMO_PASS }}", tenant: demo }
         - { name: glance, password: "{{ GLANCE_PASS }}", tenant: service }
         - { name: neutron, password: "{{ NEUTRON_PASS }}", tenant: service }
+        - { name: nova, password: "{{ NOVA_PASS }}", tenant: service }
       keystone_roles:
         - { name: admin, user: admin, tenant: admin }
         - { name: _member_, user: demo, tenant: demo  }
         - { name: admin, user: glance, tenant: service  }
         - { name: admin, user: neutron, tenant: service  }
+        - { name: admin, user: nova, tenant: service  }
       keystone_services:
         - { name: keystone, service_type: identity }
         - { name: glance, service_type: image }
         - { name: neutron, service_type: network }
+        - { name: nova, service_type: compute }
       keystone_endpoints:
         - service_name: keystone
-          public_url: "http://{{ KEYSTONE_HOSTNAME}}:{{ KEYSTONE_PORT }}/v2.0"
-          internal_url: "http://{{ KEYSTONE_HOSTNAME}}:{{ KEYSTONE_PORT }}/v2.0"
-          admin_url: "http://{{ KEYSTONE_HOSTNAME}}:{{ KEYSTONE_ADMIN_PORT }}/v2.0"
+          public_url: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME}}:{{ KEYSTONE_PORT }}/v2.0"
+          internal_url: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME}}:{{ KEYSTONE_PORT }}/v2.0"
+          admin_url: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME}}:{{ KEYSTONE_ADMIN_PORT }}/v2.0"
         - service_name: glance
-          public_url: "http://{{ GLANCE_HOSTNAME}}:{{ GLANCE_PORT }}/"
-          internal_url: "http://{{ GLANCE_HOSTNAME}}:{{ GLANCE_PORT }}/"
-          admin_url: "http://{{ GLANCE_HOSTNAME}}:{{ GLANCE_PORT }}/"
+          public_url: "{{ GLANCE_PROTOCOL }}://{{ GLANCE_HOSTNAME}}:{{ GLANCE_PORT }}/"
+          internal_url: "{{ GLANCE_PROTOCOL }}://{{ GLANCE_HOSTNAME}}:{{ GLANCE_PORT }}/"
+          admin_url: "{{ GLANCE_PROTOCOL }}://{{ GLANCE_HOSTNAME}}:{{ GLANCE_PORT }}/"
         - service_name: neutron
-          public_url: "http://{{ NEUTRON_HOSTNAME}}:{{ NEUTRON_PORT }}/"
-          internal_url: "http://{{ NEUTRON_HOSTNAME}}:{{ NEUTRON_PORT }}/"
-          admin_url: "http://{{ NEUTRON_HOSTNAME}}:{{ NEUTRON_PORT }}/"
+          public_url: "{{ NEUTRON_PROTOCOL }}://{{ NEUTRON_HOSTNAME}}:{{ NEUTRON_PORT }}/"
+          internal_url: "{{ NEUTRON_PROTOCOL }}://{{ NEUTRON_HOSTNAME}}:{{ NEUTRON_PORT }}/"
+          admin_url: "{{ NEUTRON_PROTOCOL }}://{{ NEUTRON_HOSTNAME}}:{{ NEUTRON_PORT }}/"
+        - service_name: nova
+          public_url: "{{ NOVA_API_PROTOCOL }}://{{ NOVA_API_HOSTNAME}}:{{ NOVA_API_PORT }}/v2/%(tenant_id)s"
+          internal_url: "{{ NOVA_API_PROTOCOL }}://{{ NOVA_API_HOSTNAME}}:{{ NOVA_API_PORT }}/v2/%(tenant_id)s"
+          admin_url: "{{ NOVA_API_PROTOCOL }}://{{ NOVA_API_HOSTNAME}}:{{ NOVA_API_PORT }}/v2/%(tenant_id)s"
+
 
     - role: runit
       runit_services:

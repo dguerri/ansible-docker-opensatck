@@ -14,50 +14,53 @@ RABBIT_NOVA_PASS: "Zuu1aabaewoh5tei2agh"
 RABBIT_NEUTRON_PASS: "seiye6Ekah1hoxeshook"
 
 # Keystone
+KEYSTONE_PROTOCOL: "http"
 KEYSTONE_HOSTNAME: "keystone"
+KEYSTONE_PORT: 5000
+KEYSTONE_ADMIN_PORT: 35357
 
 MYSQL_KEYSTONE_DB: "keystone"
 MYSQL_KEYSTONE_USER: "keystone"
 MYSQL_KEYSTONE_PASS: "ahleisheeW0va4datush"
-
-KEYSTONE_PORT: 5000
-KEYSTONE_ADMIN_PORT: 35357
 
 ADMIN_TOKEN: "rahveiRenai2aefez2oboiyahthoot"
 DEMO_PASS: "oosahd6ohz8eixooNgae"
 ADMIN_PASS: "dae9ai3ohboo8Phiesoh"
 
 # Glance
+GLANCE_PROTOCOL: "http"
 GLANCE_HOSTNAME: "glance"
+GLANCE_PORT: 9292
 
 MYSQL_GLANCE_DB: "glance"
 MYSQL_GLANCE_USER: "glance"
 MYSQL_GLANCE_PASS: "aiChohgailangaeBoo0V"
 
-GLANCE_PORT: 9292
-
 GLANCE_PASS: "oapimig8thuCai2aZ6ye"
 
 # Neutron
+NEUTRON_PROTOCOL: "http"
 NEUTRON_HOSTNAME: "neutron"
+NEUTRON_PORT: 9696
 
 MYSQL_NEUTRON_DB: "neutron"
 MYSQL_NEUTRON_USER: "neutron"
 MYSQL_NEUTRON_PASS: "mahxieJahku9teihie4o"
 
-NEUTRON_PORT: 9696
-
 NEUTRON_PASS: "ohghiew9eepeeP5vah4S"
+
+# Nova API
+NOVA_API_PROTOCOL: "http"
+NOVA_API_HOSTNAME: "nova"
+NOVA_API_PORT: 8774
+NOVA_API_METADATA_PORT: 8775
+
+NOVA_PASS: "EeQuoh7eiXeingialee5"
+METADATA_SECRET: "uuD7Queip0peehohth0e"
 
 
 # Database password for nova
 NOVA_DBPASS: "peeh7shuy8Iesh8Ce5aj"
-
-# Password of Compute service user nova
-NOVA_PASS: "EeQuoh7eiXeingialee5"
-
-# Metadata shared secret
-METADATA_SECRET: "uuD7Queip0peehohth0e"
 
 # Nova hypervisor to use (only kvm/qemu are currently supported)
 NOVA_VIRT_TYPE: "kvm"

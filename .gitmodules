@@ -22,3 +22,6 @@
 [submodule "ansible/roles/openstack-neutron_server"]
 	path = ansible/roles/openstack-neutron_server
 	url = https://github.com/dguerri/openstack-neutron_server.git
+[submodule "ansible/roles/openstack-nova_api"]
+	path = ansible/roles/openstack-nova_api
+	url = https://github.com/dguerri/openstack-nova_api.git
