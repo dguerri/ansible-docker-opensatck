@@ -37,8 +37,6 @@
         tls_ca_cert=../.docker/ca.pem
         tls_verify_hostname=false
         docker_url=https://{{ docker_host_ip }}:2376
-# Links are no longer required as we have auto-dns
-#        links=mysql:{{ DATABASE_HOSTNAME }}
 
     - name: Add Nova API host to inventory
       add_host: name=nova-api
@@ -64,6 +62,7 @@
 
   roles:
     - role: openstack-nova_api
+      rabbit_hostname: "{{ AMQP_HOSTNAME }}"
       rabbit_username: "openstack-nova"
       rabbit_pass: "{{ RABBIT_NOVA_PASS }}"
       metadata_secret: "{{ METADATA_SECRET }}"

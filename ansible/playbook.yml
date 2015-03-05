@@ -23,4 +23,5 @@
 - include: rabbitmq.yml
 - include: glance.yml
 - include: neutron_server.yml
+- include: nova_conductor.yml
 - include: nova_api.yml

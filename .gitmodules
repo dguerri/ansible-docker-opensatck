@@ -25,3 +25,6 @@
 [submodule "ansible/roles/openstack-nova_api"]
 	path = ansible/roles/openstack-nova_api
 	url = https://github.com/dguerri/openstack-nova_api.git
+[submodule "ansible/roles/openstack-nova_conductor"]
+	path = ansible/roles/openstack-nova_conductor
+	url = https://github.com/dguerri/openstack-nova_conductor.git

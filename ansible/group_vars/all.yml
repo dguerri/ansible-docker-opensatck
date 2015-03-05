@@ -58,9 +58,13 @@ NOVA_API_METADATA_PORT: 8775
 NOVA_PASS: "EeQuoh7eiXeingialee5"
 METADATA_SECRET: "uuD7Queip0peehohth0e"
 
+# Nova Conductor
 
-# Database password for nova
-NOVA_DBPASS: "peeh7shuy8Iesh8Ce5aj"
+MYSQL_NOVA_DB: "nova"
+MYSQL_NOVA_USER: "nova"
+MYSQL_NOVA_PASS: "peeh7shuy8Iesh8Ce5aj"
+
+
 
 # Nova hypervisor to use (only kvm/qemu are currently supported)
 NOVA_VIRT_TYPE: "kvm"
