@@ -25,3 +25,6 @@
 - include: neutron_server.yml
 - include: nova_conductor.yml
 - include: nova_api.yml
+
+- include: horizon.yml
+
