@@ -49,9 +49,6 @@
     - name: update apt cache
       apt: update_cache=yes cache_valid_time=7200
 
-    - name: install python-mysqldb
-      apt: name="python-mysqldb" state=present
-
     - name: provide a fake SysV init script for configuring nova-api
       copy: >
         src=files/nova-api
