@@ -40,7 +40,7 @@ GLANCE_PASS: "oapimig8thuCai2aZ6ye"
 
 # Neutron
 NEUTRON_PROTOCOL: "http"
-NEUTRON_HOSTNAME: "neutron"
+NEUTRON_HOSTNAME: "neutron-server"
 NEUTRON_PORT: 9696
 
 MYSQL_NEUTRON_DB: "neutron"
@@ -51,7 +51,7 @@ NEUTRON_PASS: "ohghiew9eepeeP5vah4S"
 
 # Nova API
 NOVA_API_PROTOCOL: "http"
-NOVA_API_HOSTNAME: "nova"
+NOVA_API_HOSTNAME: "nova-api"
 NOVA_API_PORT: 8774
 NOVA_API_METADATA_PORT: 8775
 
