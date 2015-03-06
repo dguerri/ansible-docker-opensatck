@@ -28,3 +28,18 @@
 [submodule "ansible/roles/openstack-nova_conductor"]
 	path = ansible/roles/openstack-nova_conductor
 	url = https://github.com/dguerri/openstack-nova_conductor.git
+[submodule "ansible/roles/openstack-neutron_plugin_ml2"]
+	path = ansible/roles/openstack-neutron_plugin_ml2
+	url = https://github.com/dguerri/openstack-neutron_plugin_ml2.git
+[submodule "ansible/roles/openstack-neutron_plugin_openvswitch_agent"]
+	path = ansible/roles/openstack-neutron_plugin_openvswitch_agent
+	url = https://github.com/dguerri/openstack-neutron_plugin_openvswitch_agent.git
+[submodule "ansible/roles/openstack-neutron_l3_agent"]
+	path = ansible/roles/openstack-neutron_l3_agent
+	url = https://github.com/dguerri/openstack-neutron_l3_agent.git
+[submodule "ansible/roles/openstack-neutron_dhcp_agent"]
+	path = ansible/roles/openstack-neutron_dhcp_agent
+	url = https://github.com/dguerri/openstack-neutron_dhcp_agent.git
+[submodule "ansible/roles/openstack-horizon"]
+	path = ansible/roles/openstack-horizon
+	url = https://github.com/dguerri/openstack-horizon.git
