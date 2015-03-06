@@ -64,6 +64,7 @@
 
   roles:
     - role: openstack-nova_api
+      keystone_hostname: "{{ KEYSTONE_HOSTNAME }}"
       rabbit_hostname: "{{ AMQP_HOSTNAME }}"
       rabbit_username: "openstack-nova"
       rabbit_pass: "{{ RABBIT_NOVA_PASS }}"
@@ -74,7 +75,7 @@
       metadata_port: "{{ NOVA_API_METADATA_PORT }}"
       nova_pass: "{{ NOVA_PASS }}"
       glance_protocol: "{{ GLANCE_PROTOCOL }}"
-      glance_host: "{{ GLANCE_HOST }}"
+      glance_hostname: "{{ GLANCE_HOSTNAME }}"
       glance_port: "{{ GLANCE_PORT }}"
       neutron_protocol: "{{ NEUTRON_PROTOCOL }}"
       neutron_host: "{{ NEUTRON_HOST }}"
