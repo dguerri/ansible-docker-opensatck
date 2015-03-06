@@ -39,6 +39,10 @@
 
     - name: Add Keystone host to inventory
       add_host: name=glance
+  tags:
+    - glance
+    - controller
+
 
 - name: Configure Glance
   hosts: glance
@@ -87,3 +91,6 @@
               --chdir /var/lib/glance --name glance-registry \
               --exec /usr/bin/glance-registry
           state: stopped
+  tags:
+    - glance
+    - controller

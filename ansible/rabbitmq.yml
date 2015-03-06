@@ -39,6 +39,11 @@
     - name: Add RabbitMQ host to inventory
       add_host: name=rabbitmq
 
+  tags:
+    - rabbitmq
+    - controller
+
+
 - name: configure rabbitmq
   hosts: rabbitmq
   connection: docker
@@ -70,3 +75,7 @@
             start-stop-daemon --quiet \
               --chuid rabbitmq --start --exec /usr/sbin/rabbitmq-server
           state: stopped
+
+  tags:
+    - rabbitmq
+    - controller

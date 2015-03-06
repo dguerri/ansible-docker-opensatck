@@ -40,6 +40,11 @@
     - name: Add Keystone host to inventory
       add_host: name=keystone
 
+  tags:
+    - keystone
+    - controller
+
+
 - name: Configure Keystone
   hosts: keystone
   connection: docker
@@ -114,3 +119,7 @@
               --chdir /var/lib/keystone --name keystone \
               --exec /usr/bin/keystone-all
           state: stopped
+
+  tags:
+    - keystone
+    - controller

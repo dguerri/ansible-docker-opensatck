@@ -39,6 +39,11 @@
     - name: Add MySQL host to inventory
       add_host: name=mysql
 
+  tags:
+    - mysql
+    - controller
+
+
 - name: Configure MySQL
   hosts: mysql
   connection: docker
@@ -84,6 +89,7 @@
           pass: "{{ MYSQL_NOVA_PASS }}"
           priv: "{{ MYSQL_NOVA_DB }}.*:ALL"
           host: "%"
+
     - role: runit
       runit_services:
         - name: mysql
@@ -91,3 +97,6 @@
             start-stop-daemon --start --name mysql \
               --exec /usr/bin/mysqld_safe
           state: stopped
+  tags:
+    - mysql
+    - controller

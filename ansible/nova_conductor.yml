@@ -38,6 +38,10 @@
 
     - name: Add Nova Conductor host to inventory
       add_host: name=nova-conductor
+  tags:
+    - nova_conductor
+    - controller
+
 
 - name: Configure Nova Conductor
   hosts: nova-conductor
@@ -73,3 +77,6 @@
               --chdir /var/lib/nova --name nova-conductor \
               --exec /usr/bin/nova-conductor
           state: stopped
+  tags:
+    - nova_conductor
+    - controller

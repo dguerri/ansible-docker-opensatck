@@ -41,6 +41,11 @@
     - name: Add Nova API host to inventory
       add_host: name=nova-api
 
+  tags:
+    - nova_api
+    - controller
+
+
 - name: Configure Nova API
   hosts: nova-api
   connection: docker
@@ -84,3 +89,7 @@
               --chdir /var/lib/nova --name nova-api \
               --exec /usr/bin/nova-api
           state: stopped
+
+  tags:
+    - nova_api
+    - controller
