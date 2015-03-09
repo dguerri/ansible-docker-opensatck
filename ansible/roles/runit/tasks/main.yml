@@ -41,6 +41,11 @@
     mode=0755
   with_items: runit_services
 
+- name: Wait for runit to discover the new services
+  wait_for:
+    path: "/etc/service/{{ item.name }}/supervise/ok"
+  with_items: runit_services
+
 - name: Stop runit services if required
   command: "sv stop {{ item.name }}"
   when: item.state == 'stopped'
