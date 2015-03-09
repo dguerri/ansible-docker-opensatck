@@ -17,10 +17,10 @@
 # limitations under the License.
 #
 
-- name: install runit
+- name: Install runit
   apt: name=runit state=present
 
-- name: runsvdir service
+- name: Start runsvdir service
   service: name=runsvdir state=started
 
 - name: Create runit service directories

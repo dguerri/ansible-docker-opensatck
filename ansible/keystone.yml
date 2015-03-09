@@ -50,13 +50,13 @@
   connection: docker
 
   pre_tasks:
-    - name: update apt cache
+    - name: Update apt cache
       apt: update_cache=yes cache_valid_time=7200
 
     - name: install python-mysqldb
       apt: name="python-mysqldb" state=present
 
-    - name: provide a fake SysV init script for configuring keystone
+    - name: Provide a fake SysV init script for configuring keystone
       copy: >
         src=files/keystone
         dest=/etc/init.d/keystone

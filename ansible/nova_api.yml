@@ -51,10 +51,10 @@
   connection: docker
 
   pre_tasks:
-    - name: update apt cache
+    - name: Update apt cache
       apt: update_cache=yes cache_valid_time=7200
 
-    - name: provide a fake SysV init script for configuring nova-api
+    - name: Provide a fake SysV init script for configuring nova-api
       copy: >
         src=files/nova-api
         dest=/etc/init.d/nova-api
