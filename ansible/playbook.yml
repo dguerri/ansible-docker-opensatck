@@ -39,6 +39,8 @@
 
 # Network controller
 
-- include: neutron_dhcp_agent.yml
+#- include: neutron_dhcp_agent.yml
+
+#- include: neutron_l3_agent.yml
 
 # Compute

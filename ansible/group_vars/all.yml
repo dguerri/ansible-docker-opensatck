@@ -70,6 +70,9 @@ HORIZON_HOSTNAME: "horizon"
 # Neutron DHCP agent
 NEUTRON_DHCP_AGENT_HOSTNAME: "neutron-dhcp"
 
+# Neutron L3 agent
+NEUTRON_L3_AGENT_HOSTNAME: "neutron-l3"
+
 
 # Nova hypervisor to use (only kvm/qemu are currently supported)
 NOVA_VIRT_TYPE: "kvm"

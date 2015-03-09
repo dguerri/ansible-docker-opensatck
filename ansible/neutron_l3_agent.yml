@@ -1,0 +1,116 @@
+---
+
+#
+# Copyright (c) 2015 Davide Guerri <davide.guerri@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+# implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+- name: Start up Neutron L3 agent docker container
+  hosts: localhost
+
+  tasks:
+    - name: Start Neutron L3 agent container
+      docker: >
+        image=base-image
+        name=neutron-l3-agent
+        hostname={{ NEUTRON_L3_AGENT_HOSTNAME }}
+        privileged=yes
+        detach=yes
+        tty=yes
+        use_tls=custom
+        tls_client_cert=../.docker/cert.pem
+        tls_client_key=../.docker/key.pem
+        tls_ca_cert=../.docker/ca.pem
+        tls_verify_hostname=false
+        docker_url=https://{{ docker_host_ip }}:2376
+
+    - name: Add Keystone host to inventory
+      add_host: name=neutron-l3-agent
+  tags:
+    - neutron_l3_agent
+    - network
+
+
+- name: Configure Neutron L3 agent
+  hosts: neutron-l3-agent
+  connection: docker
+
+  pre_tasks:
+    - name: Update apt cache
+      apt: update_cache=yes cache_valid_time=7200
+
+    - name: Provide a fake SysV init script for configuring Neutron agents
+      copy: >
+        src={{ item.src }}
+        dest={{ item.dst }}
+        owner=root
+        group=root
+        mode=0755
+      with_items:
+        - src: files/neutron-metadata-agent
+          dst: /etc/init.d/neutron-metadata-agent
+        - src: files/neutron-l3-agent
+          dst: /etc/init.d/neutron-l3-agent
+
+    - name: Create a tap device
+      command: ip tuntap add dev tap0 mode tap
+      failed_when: false
+      register: tap_creare
+      changed_when: tap_creare.rc == 0
+
+
+  roles:
+    - role: openstack-neutron_l3_agent
+      rabbit_hostname: "{{ AMQP_HOSTNAME }}"
+      rabbit_username: openstack-neutron
+      rabbit_pass: "{{ RABBIT_NEUTRON_PASS }}"
+      external_interface: tap0
+      metadata_secret: "{{ METADATA_SECRET }}"
+      neutron_pass: "{{ NEUTRON_PASS }}"
+      nova_metadata_ip: "{{ NOVA_API_HOSTNAME }}"
+      keystone_hostname: "{{ KEYSTONE_HOSTNAME }}"
+
+    - role: runit
+      runit_services:
+        - name: neutron-metadata-agent
+          command: |
+            mkdir -p /var/run/neutron
+            chown neutron:root /var/run/neutron
+            start-stop-daemon --start --chuid neutron \
+              --chdir /var/lib/neutron-metadata-agent \
+              --name neutron-metadata-agent \
+              --exec /usr/bin/neutron-metadata-agent -- \
+              --config-file=/etc/neutron/neutron.conf \
+              --config-file=/etc/neutron/metadata_agent.ini \
+              --log-file=/var/log/neutron/metadata-agent.log
+          state: stopped
+        - name: neutron-l3-agent
+          command: |
+            /etc/init.d/openvswitch-switch start
+            mkdir -p /var/run/neutron
+            chown neutron:root /var/run/neutron
+            if status neutron-ovs-cleanup; then
+              start wait-for-state WAIT_FOR=neutron-ovs-cleanup WAIT_STATE=running WAITER=neutron-l3-agent
+            fi
+            start-stop-daemon --start --chuid neutron \
+              --chdir /var/lib/neutron-l3-agent --name neutron-l3-agent \
+              --exec /usr/bin/neutron-l3-agent -- \
+              --config-file=/etc/neutron/neutron.conf \
+              --config-file=/etc/neutron/l3_agent.ini \
+              --log-file=/var/log/neutron/l3-agent.log
+          state: stopped
+  tags:
+    - neutron_l3_agent
+    - network
