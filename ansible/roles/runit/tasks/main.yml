@@ -47,6 +47,11 @@
   with_items: runit_services
 
 - name: Stop runit services if required
-  command: "sv stop {{ item.name }}"
+  shell: >
+    sv status {{ item.name }}|grep '^down: '>/dev/null
+    && echo 'already stopped'
+    || sv stop {{ item.name }}
   when: item.state == 'stopped'
+  register: runit_status
+  changed_when: runit_status.stdout.find('already stopped') == -1
   with_items: runit_services
