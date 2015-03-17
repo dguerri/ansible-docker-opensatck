@@ -5,7 +5,7 @@ VAGRANTFILE_API_VERSION = '2'
 
 Vagrant.require_version '>= 1.6.3'
 
-auto_dns_script = <<EOS
+setup_boot2docker = <<EOS
 echo Adding DNS flags to docker host...
 
 echo 'EXTRA_ARGS="$EXTRA_ARGS --bip=172.17.42.1/16 --dns=172.17.42.1 \
@@ -25,7 +25,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.insert_key = false
 
   config.vm.synced_folder '.', '/vagrant', disabled: true
-  config.vm.synced_folder '.images_cache', '/var/lib/docker/graph/'
 
   config.vm.provider 'parallels' do |p|
     p.update_guest_tools = true
@@ -36,5 +35,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     p.customize ['set', :id, '--adaptive-hypervisor', 'on']
   end
 
-  config.vm.provision 'shell', inline: auto_dns_script
+  config.vm.provision 'shell', inline: setup_boot2docker
 end
