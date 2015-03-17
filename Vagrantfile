@@ -15,7 +15,6 @@ echo 'EXTRA_ARGS="$EXTRA_ARGS --bip=172.17.42.1/16 --dns=172.17.42.1 --dns=8.8.8
 EOS
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "wearableintelligence/boot2docker-parallels"
   if Vagrant.has_plugin?('vagrant-cachier')
     config.cache.auto_detect = false
     config.cache.enable :apt
@@ -27,6 +26,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider "parallels" do |p|
   config.vm.synced_folder '.', '/vagrant', disabled: true
+  config.vm.box = 'parallels/boot2docker'
+
+  config.ssh.insert_key = false
 
 
     p.update_guest_tools = true
