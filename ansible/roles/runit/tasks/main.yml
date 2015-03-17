@@ -22,6 +22,7 @@
 
 - name: Start runsvdir service
   service: name=runsvdir state=started
+  ignore_errors: true
 
 - name: Create runit service directories
   file: >
