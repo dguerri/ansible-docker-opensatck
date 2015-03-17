@@ -18,6 +18,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "wearableintelligence/boot2docker-parallels"
 
   config.vm.provider "parallels" do |p|
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+
+  config.cache.synced_folder_opts = {
+    type: 'rsync'
+  }
+
     p.update_guest_tools = true
     p.memory = 8192
     p.cpus = 6
