@@ -30,12 +30,12 @@
         volumes=/var/run/docker.sock:/var/run/docker.sock
         detach=yes
         tty=yes
-        use_tls=custom
+        use_tls=verify
         tls_client_cert=../.docker/cert.pem
         tls_client_key=../.docker/key.pem
         tls_ca_cert=../.docker/ca.pem
-        tls_verify_hostname=false
-        docker_url=https://{{ docker_host_ip }}:2376
+        tls_hostname=boot2docker
+        docker_url=tcp://{{ docker_host_ip }}:2376
 
   tags:
     - autodns

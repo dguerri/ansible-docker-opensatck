@@ -31,11 +31,11 @@
         privileged=yes
         detach=yes
         tty=yes
-        use_tls=custom
+        use_tls=verify
         tls_client_cert=../.docker/cert.pem
         tls_client_key=../.docker/key.pem
         tls_ca_cert=../.docker/ca.pem
-        tls_verify_hostname=false
+        tls_hostname=boot2docker
         docker_url=https://{{ docker_host_ip }}:2376
 
     - name: Add Nova API host to inventory
@@ -77,7 +77,7 @@
       glance_hostname: "{{ GLANCE_HOSTNAME }}"
       glance_port: "{{ GLANCE_PORT }}"
       neutron_protocol: "{{ NEUTRON_PROTOCOL }}"
-      neutron_host: "{{ NEUTRON_HOST }}"
+      neutron_host: "{{ NEUTRON_SERVER_HOSTNAME }}"
       neutron_port: "{{ NEUTRON_PORT }}"
       neutron_pass: "{{ NEUTRON_PASS }}"
 

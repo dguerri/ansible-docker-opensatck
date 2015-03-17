@@ -9,7 +9,6 @@ MYSQL_ROOT: "aexigheefeiph6hae3Ke"
 AMQP_HOSTNAME: "rabbitmq"
 
 RABBIT_GLANCE_PASS: "Uawaiyiz6tee7chietoC"
-RABBIT_NOVA_PASS: "Mie0ohd9eizei8oChu9V"
 RABBIT_NOVA_PASS: "Zuu1aabaewoh5tei2agh"
 RABBIT_NEUTRON_PASS: "seiye6Ekah1hoxeshook"
 
@@ -40,7 +39,7 @@ GLANCE_PASS: "oapimig8thuCai2aZ6ye"
 
 # Neutron
 NEUTRON_PROTOCOL: "http"
-NEUTRON_HOSTNAME: "neutron-server"
+NEUTRON_SERVER_HOSTNAME: "neutron-server"
 NEUTRON_PORT: 9696
 
 MYSQL_NEUTRON_DB: "neutron"

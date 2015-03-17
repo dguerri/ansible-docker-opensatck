@@ -30,11 +30,11 @@
         ports=0.0.0.0:{{ KEYSTONE_PORT }}:{{ KEYSTONE_PORT }},0.0.0.0:{{ KEYSTONE_ADMIN_PORT }}:{{ KEYSTONE_ADMIN_PORT }}
         detach=yes
         tty=yes
-        use_tls=custom
+        use_tls=verify
         tls_client_cert=../.docker/cert.pem
         tls_client_key=../.docker/key.pem
         tls_ca_cert=../.docker/ca.pem
-        tls_verify_hostname=false
+        tls_hostname=boot2docker
         docker_url=https://{{ docker_host_ip }}:2376
 
     - name: Add Keystone host to inventory
@@ -94,21 +94,21 @@
         - { name: nova, service_type: compute }
       keystone_endpoints:
         - service_name: keystone
-          public_url: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME}}:{{ KEYSTONE_PORT }}/v2.0"
-          internal_url: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME}}:{{ KEYSTONE_PORT }}/v2.0"
-          admin_url: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME}}:{{ KEYSTONE_ADMIN_PORT }}/v2.0"
+          public_url: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME }}:{{ KEYSTONE_PORT }}/v2.0"
+          internal_url: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME }}:{{ KEYSTONE_PORT }}/v2.0"
+          admin_url: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME }}:{{ KEYSTONE_ADMIN_PORT }}/v2.0"
         - service_name: glance
-          public_url: "{{ GLANCE_PROTOCOL }}://{{ GLANCE_HOSTNAME}}:{{ GLANCE_PORT }}/"
-          internal_url: "{{ GLANCE_PROTOCOL }}://{{ GLANCE_HOSTNAME}}:{{ GLANCE_PORT }}/"
-          admin_url: "{{ GLANCE_PROTOCOL }}://{{ GLANCE_HOSTNAME}}:{{ GLANCE_PORT }}/"
+          public_url: "{{ GLANCE_PROTOCOL }}://{{ GLANCE_HOSTNAME }}:{{ GLANCE_PORT }}/"
+          internal_url: "{{ GLANCE_PROTOCOL }}://{{ GLANCE_HOSTNAME }}:{{ GLANCE_PORT }}/"
+          admin_url: "{{ GLANCE_PROTOCOL }}://{{ GLANCE_HOSTNAME }}:{{ GLANCE_PORT }}/"
         - service_name: neutron
-          public_url: "{{ NEUTRON_PROTOCOL }}://{{ NEUTRON_HOSTNAME}}:{{ NEUTRON_PORT }}/"
-          internal_url: "{{ NEUTRON_PROTOCOL }}://{{ NEUTRON_HOSTNAME}}:{{ NEUTRON_PORT }}/"
-          admin_url: "{{ NEUTRON_PROTOCOL }}://{{ NEUTRON_HOSTNAME}}:{{ NEUTRON_PORT }}/"
+          public_url: "{{ NEUTRON_PROTOCOL }}://{{ NEUTRON_SERVER_HOSTNAME }}:{{ NEUTRON_PORT }}/"
+          internal_url: "{{ NEUTRON_PROTOCOL }}://{{ NEUTRON_SERVER_HOSTNAME }}:{{ NEUTRON_PORT }}/"
+          admin_url: "{{ NEUTRON_PROTOCOL }}://{{ NEUTRON_SERVER_HOSTNAME }}:{{ NEUTRON_PORT }}/"
         - service_name: nova
-          public_url: "{{ NOVA_API_PROTOCOL }}://{{ NOVA_API_HOSTNAME}}:{{ NOVA_API_PORT }}/v2/%(tenant_id)s"
-          internal_url: "{{ NOVA_API_PROTOCOL }}://{{ NOVA_API_HOSTNAME}}:{{ NOVA_API_PORT }}/v2/%(tenant_id)s"
-          admin_url: "{{ NOVA_API_PROTOCOL }}://{{ NOVA_API_HOSTNAME}}:{{ NOVA_API_PORT }}/v2/%(tenant_id)s"
+          public_url: "{{ NOVA_API_PROTOCOL }}://{{ NOVA_API_HOSTNAME }}:{{ NOVA_API_PORT }}/v2/%(tenant_id)s"
+          internal_url: "{{ NOVA_API_PROTOCOL }}://{{ NOVA_API_HOSTNAME }}:{{ NOVA_API_PORT }}/v2/%(tenant_id)s"
+          admin_url: "{{ NOVA_API_PROTOCOL }}://{{ NOVA_API_HOSTNAME }}:{{ NOVA_API_PORT }}/v2/%(tenant_id)s"
 
 
     - role: runit
