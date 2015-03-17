@@ -16,13 +16,18 @@ EOS
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "wearableintelligence/boot2docker-parallels"
+  if Vagrant.has_plugin?('vagrant-cachier')
+    config.cache.auto_detect = false
+    config.cache.enable :apt
+    config.cache.scope = CACHE_SCOPE
+    config.cache.synced_folder_opts = {
+      type: 'rsync'
+    }
+  end
 
   config.vm.provider "parallels" do |p|
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
-  config.cache.synced_folder_opts = {
-    type: 'rsync'
-  }
 
     p.update_guest_tools = true
     p.memory = 8192
