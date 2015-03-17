@@ -4,6 +4,10 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export VAGRANT_DEFAULT_PROVIDER=parallels
 
+if [ ! -d "$DIR/.images_cache" ]; then
+  mkdir "$DIR/.images_cache"
+fi
+
 vagrant destroy -f
 vagrant up
 

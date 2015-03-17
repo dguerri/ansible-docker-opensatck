@@ -17,20 +17,17 @@ EOS
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if Vagrant.has_plugin?('vagrant-cachier')
     config.cache.auto_detect = false
-    config.cache.enable :apt
-    config.cache.scope = CACHE_SCOPE
-    config.cache.synced_folder_opts = {
-      type: 'rsync'
-    }
+    config.cache.enable nil
   end
 
-  config.vm.provider "parallels" do |p|
-  config.vm.synced_folder '.', '/vagrant', disabled: true
   config.vm.box = 'parallels/boot2docker'
 
   config.ssh.insert_key = false
 
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+  config.vm.synced_folder '.images_cache', '/var/lib/docker/graph/'
 
+  config.vm.provider 'parallels' do |p|
     p.update_guest_tools = true
     p.memory = 8192
     p.cpus = 6
