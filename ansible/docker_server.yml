@@ -1,7 +1,7 @@
 ---
 
 #
-# Copyright (c) 2014 Davide Guerri <davide.guerri@gmail.com>
+# Copyright (c) 2015 Davide Guerri <davide.guerri@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,3 +16,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+- name: Docker server customization
+  hosts: docker-server
+
+  tasks:
+    - name: Provide a fake rabbitmqctl app
+      copy:
+        src: files/rabbitmqctl
+        dest: /usr/local/bin/rabbitmqctl
+        owner: root
+        group: root
+        mode: 0755
+      become: yes

@@ -18,61 +18,53 @@
 #
 
 - name: Start up MySQL docker container
-  hosts: localhost
+  hosts: docker-server
 
   tasks:
     - name: Start MySQL container
-      docker: >
-        image=base-image
-        name=mysql
-        hostname={{ DATABASE_HOSTNAME }}
-        expose=3306
-        detach=yes
-        tty=yes
-        docker_url=tcp://{{ docker_host_ip }}:2375
-#        use_tls=verify
-#        tls_client_cert=../.docker/cert.pem
-#        tls_client_key=../.docker/key.pem
-#        tls_ca_cert=../.docker/ca.pem
-#        tls_hostname=boot2docker
+      docker:
+        image: mysql:5.6
+        name: "{{ DATABASE_HOSTNAME }}"
+        hostname: "{{ DATABASE_HOSTNAME }}"
+        expose: 3306
+        detach: yes
+        tty: yes
+        env:
+          MYSQL_ROOT_PASSWORD: "{{ MYSQL_ROOT }}"
+      become: yes
 
-    - name: Add MySQL host to inventory
-      add_host: name=mysql
+    - name: Wait MySQL server
+      wait_for:
+        host: "{{ DATABASE_HOSTNAME }}"
+        port: 3306
+        state: started
 
-  tags:
-    - mysql
-    - controller
+    - name: Add OpenStack Databases
+      mysql_db:
+        name: "{{ item }}"
+        collation: "utf8_general_ci"
+        encoding: "utf8"
+        state: present
+        login_user: root
+        login_password: "{{ MYSQL_ROOT }}"
+        login_host: "{{ DATABASE_HOSTNAME }}"
+      with_items:
+        - "{{ MYSQL_KEYSTONE_DB }}"
+        - "{{ MYSQL_GLANCE_DB }}"
+        - "{{ MYSQL_NEUTRON_DB }}"
+        - "{{ MYSQL_NOVA_DB }}"
 
-
-- name: Configure MySQL
-  hosts: mysql
-  connection: docker
-
-  pre_tasks:
-    - name: Update apt cache
-      apt: update_cache=yes cache_valid_time=7200
-
-  roles:
-    - role: mysql
-      mysql_root_password: "{{ MYSQL_ROOT }}"
-      mysql_bind_address: 0.0.0.0
-      mysql_character_set_server: "utf8"
-      mysql_collation_server: "utf8_general_ci"
-      mysql_innodb_file_per_table: "innodb_file_per_table"
-      mysql_databases:
-        - name: "{{ MYSQL_KEYSTONE_DB }}"
-          collation: "utf8_general_ci"
-          encoding: "utf8"
-        - name: "{{ MYSQL_GLANCE_DB }}"
-          collation: "utf8_general_ci"
-          encoding: "utf8"
-        - name: "{{ MYSQL_NEUTRON_DB }}"
-          collation: "utf8_general_ci"
-          encoding: "utf8"
-        - name: "{{ MYSQL_NOVA_DB }}"
-          collation: "utf8_general_ci"
-          encoding: "utf8"
-      mysql_users:
+    - name: Add OpenStack Users
+      mysql_user:
+        name: "{{ item.name }}"
+        password: "{{ item.pass }}"
+        priv: "{{ item.priv }}"
+        host: "{{ item.host }}"
+        state: present
+        login_user: root
+        login_password: "{{ MYSQL_ROOT }}"
+        login_host: "{{ DATABASE_HOSTNAME }}"
+      with_items:
         - name: "{{ MYSQL_KEYSTONE_USER }}"
           pass: "{{ MYSQL_KEYSTONE_PASS }}"
           priv: "{{ MYSQL_KEYSTONE_DB }}.*:ALL"
@@ -90,13 +82,6 @@
           priv: "{{ MYSQL_NOVA_DB }}.*:ALL"
           host: "%"
 
-    - role: runit
-      runit_services:
-        - name: mysql
-          command: |
-            start-stop-daemon --start --name mysql \
-              --exec /usr/bin/mysqld_safe
-          state: stopped
   tags:
     - mysql
     - controller

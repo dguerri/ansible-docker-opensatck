@@ -30,7 +30,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     p.update_guest_tools = true
     p.memory = 8192
     p.cpus = 6
-    p.optimize_power_consumption = false
+    p.optimize_power_consumption = true
     p.customize ['set', :id, '--nested-virt', 'on']
     p.customize ['set', :id, '--adaptive-hypervisor', 'on']
   end

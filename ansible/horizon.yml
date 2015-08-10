@@ -23,7 +23,7 @@
   tasks:
     - name: Start Horizon container
       docker: >
-        image=base-image
+        image=openstack-base-image
         name=horizon
         hostname={{ HORIZON_HOSTNAME }}
         expose=80
@@ -31,7 +31,7 @@
         privileged=no
         detach=yes
         tty=yes
-        docker_url=tcp://{{ docker_host_ip }}:2375
+        docker_url={{ docker_host }}
 #        use_tls=verify
 #        tls_client_cert=../.docker/cert.pem
 #        tls_client_key=../.docker/key.pem

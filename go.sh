@@ -16,6 +16,7 @@ EOF
 
 docker version
 
-docker build -t base-image ./base-image
+docker build -t openstack-base-image ./openstack-base-image
 
-ansible-playbook -i ansible/inventory ansible/playbook.yml -e "docker_host_ip=$DOCKER_HOST_IP"
+ansible-playbook -i ansible/inventory/inventory \
+    ansible/playbook.yml -e "docker_host=$DOCKER_HOST"

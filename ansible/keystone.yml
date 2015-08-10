@@ -23,14 +23,14 @@
   tasks:
     - name: Start Keystone container
       docker: >
-        image=base-image
+        image=openstack-base-image
         name=keystone
         hostname={{ KEYSTONE_HOSTNAME }}
         expose={{ KEYSTONE_PORT }},{{ KEYSTONE_ADMIN_PORT }}
         ports=0.0.0.0:{{ KEYSTONE_PORT }}:{{ KEYSTONE_PORT }},0.0.0.0:{{ KEYSTONE_ADMIN_PORT }}:{{ KEYSTONE_ADMIN_PORT }}
         detach=yes
         tty=yes
-        docker_url=tcp://{{ docker_host_ip }}:2375
+        docker_url={{ docker_host }}
 #        use_tls=verify
 #        tls_client_cert=../.docker/cert.pem
 #        tls_client_key=../.docker/key.pem

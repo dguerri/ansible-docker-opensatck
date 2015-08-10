@@ -23,13 +23,13 @@
   tasks:
     - name: Start Neutron L3 agent container
       docker: >
-        image=base-image
+        image=openstack-base-image
         name=neutron-l3-agent
         hostname={{ NEUTRON_L3_AGENT_HOSTNAME }}
         privileged=yes
         detach=yes
         tty=yes
-        docker_url=tcp://{{ docker_host_ip }}:2375
+        docker_url={{ docker_host }}
 #        use_tls=custom
 #        tls_client_cert=../.docker/cert.pem
 #        tls_client_key=../.docker/key.pem

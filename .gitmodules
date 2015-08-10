@@ -7,39 +7,3 @@
 [submodule "ansible/roles/ansible-playbook-rabbitmq"]
 	path = ansible/roles/ansible-playbook-rabbitmq
 	url = https://github.com/Mayeu/ansible-playbook-rabbitmq.git
-[submodule "ansible/roles/rabbitmq"]
-	path = ansible/roles/rabbitmq
-	url = https://github.com/Mayeu/ansible-playbook-rabbitmq.git
-[submodule "ansible/roles/mysql"]
-	path = ansible/roles/mysql
-	url = https://github.com/ANXS/mysql.git
-[submodule "ansible/roles/openstack-keystone"]
-	path = ansible/roles/openstack-keystone
-	url = https://github.com/dguerri/openstack-keystone.git
-[submodule "ansible/roles/openstack-glance"]
-	path = ansible/roles/openstack-glance
-	url = https://github.com/dguerri/openstack-glance.git
-[submodule "ansible/roles/openstack-neutron_server"]
-	path = ansible/roles/openstack-neutron_server
-	url = https://github.com/dguerri/openstack-neutron_server.git
-[submodule "ansible/roles/openstack-nova_api"]
-	path = ansible/roles/openstack-nova_api
-	url = https://github.com/dguerri/openstack-nova_api.git
-[submodule "ansible/roles/openstack-nova_conductor"]
-	path = ansible/roles/openstack-nova_conductor
-	url = https://github.com/dguerri/openstack-nova_conductor.git
-[submodule "ansible/roles/openstack-neutron_plugin_ml2"]
-	path = ansible/roles/openstack-neutron_plugin_ml2
-	url = https://github.com/dguerri/openstack-neutron_plugin_ml2.git
-[submodule "ansible/roles/openstack-neutron_plugin_openvswitch_agent"]
-	path = ansible/roles/openstack-neutron_plugin_openvswitch_agent
-	url = https://github.com/dguerri/openstack-neutron_plugin_openvswitch_agent.git
-[submodule "ansible/roles/openstack-neutron_l3_agent"]
-	path = ansible/roles/openstack-neutron_l3_agent
-	url = https://github.com/dguerri/openstack-neutron_l3_agent.git
-[submodule "ansible/roles/openstack-neutron_dhcp_agent"]
-	path = ansible/roles/openstack-neutron_dhcp_agent
-	url = https://github.com/dguerri/openstack-neutron_dhcp_agent.git
-[submodule "ansible/roles/openstack-horizon"]
-	path = ansible/roles/openstack-horizon
-	url = https://github.com/dguerri/openstack-horizon.git

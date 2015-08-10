@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-
-# Start {{ item.name }}
-
-{{ item.command }}
