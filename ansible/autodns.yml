@@ -22,6 +22,7 @@
 
   tasks:
     - name: Start Auto-DNS container
+      become: yes
       docker:
         image: rehabstudio/autodns
         name: "{{ AUTODNS_NAME }}"
@@ -30,7 +31,6 @@
         volumes: /var/run/docker.sock:/var/run/docker.sock
         detach: yes
         tty: yes
-      become: yes
 
   tags:
     - autodns

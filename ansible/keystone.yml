@@ -18,81 +18,108 @@
 #
 
 - name: Start up Keystone docker container
-  hosts: localhost
+  hosts: docker-server
 
   tasks:
     - name: Start Keystone container
-      docker: >
-        image=openstack-base-image
-        name=keystone
-        hostname={{ KEYSTONE_HOSTNAME }}
-        expose={{ KEYSTONE_PORT }},{{ KEYSTONE_ADMIN_PORT }}
-        ports=0.0.0.0:{{ KEYSTONE_PORT }}:{{ KEYSTONE_PORT }},0.0.0.0:{{ KEYSTONE_ADMIN_PORT }}:{{ KEYSTONE_ADMIN_PORT }}
-        detach=yes
-        tty=yes
-        docker_url={{ docker_host }}
-#        use_tls=verify
-#        tls_client_cert=../.docker/cert.pem
-#        tls_client_key=../.docker/key.pem
-#        tls_ca_cert=../.docker/ca.pem
-#        tls_hostname=boot2docker
+      become: yes
+      docker:
+        image: dguerri/openstack-keystone
+        name: "{{ KEYSTONE_HOSTNAME }}"
+        hostname: "{{ KEYSTONE_HOSTNAME }}"
+        expose: "{{ KEYSTONE_PORT }},{{ KEYSTONE_ADMIN_PORT }}"
+        ports: 0.0.0.0:{{ KEYSTONE_PORT }}:{{ KEYSTONE_PORT }},0.0.0.0:{{ KEYSTONE_ADMIN_PORT }}:{{ KEYSTONE_ADMIN_PORT }}
+        detach: yes
+        tty: yes
+        env:
+          ADMIN_TOKEN: "{{ ADMIN_TOKEN }}"
+          MYSQL_ROOT_PASSWORD: "{{ MYSQL_ROOT }}"
+          MYSQL_HOST: "{{ DATABASE_HOSTNAME }}"
+          KEYSTONE_DBUSER: "{{ MYSQL_KEYSTONE_USER }}"
+          KEYSTONE_DBPASS: "{{ MYSQL_KEYSTONE_PASS }}"
 
-    - name: Add Keystone host to inventory
-      add_host: name=keystone
+    - name: Wait Keystone server (user port)
+      wait_for:
+        host: "{{ KEYSTONE_HOSTNAME }}"
+        port: "{{ KEYSTONE_PORT }}"
+        state: started
 
-  tags:
-    - keystone
-    - controller
+    - name: Wait Keystone server (admin port)
+      wait_for:
+        host: "{{ KEYSTONE_HOSTNAME }}"
+        port: "{{ KEYSTONE_ADMIN_PORT }}"
+        state: started
 
-
-- name: Configure Keystone
-  hosts: keystone
-  connection: docker
-
-  pre_tasks:
-    - name: Update apt cache
-      apt: update_cache=yes cache_valid_time=7200
-
-    - name: install python-mysqldb
-      apt: name="python-mysqldb" state=present
-
-    - name: Provide a fake SysV init script for configuring keystone
-      copy: >
-        src=files/keystone
-        dest=/etc/init.d/keystone
-        owner=root
-        group=root
-        mode=0755
-
-  roles:
-    - role: openstack-keystone
-      keystone_database_url: "mysql://{{ MYSQL_KEYSTONE_USER }}:{{ MYSQL_KEYSTONE_PASS }}@{{ DATABASE_HOSTNAME }}/{{ MYSQL_KEYSTONE_DB }}"
-      keystone_hostname: "{{ KEYSTONE_HOSTNAME }}"
-      keystone_port: "{{ KEYSTONE_PORT }}"
-      keystone_admin_port: "{{ KEYSTONE_ADMIN_PORT }}"
-      keystone_admin_token: "{{ ADMIN_TOKEN }}"
-      keystone_tenants:
+    - name: Create Keystone tenants
+      keystone_user:
+        tenant: "{{ item.name }}"
+        tenant_description: "{{ item.description|default('') }}"
+        endpoint: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME }}:{{ KEYSTONE_ADMIN_PORT }}/v2.0"
+        token: "{{ ADMIN_TOKEN }}"
+        state: present
+      with_items:
         - { name: admin, description: "Admin tenant" }
         - { name: service, description: "Service tenant" }
         - { name: demo, description: "Demo tenant"  }
-      keystone_users:
+
+    - name: Create Keystone users
+      keystone_user:
+        user: "{{ item.name }}"
+        password: "{{ item.password }}"
+        tenant: "{{ item.tenant }}"
+        email: nobody@localhost
+        endpoint: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME }}:{{ KEYSTONE_ADMIN_PORT }}/v2.0"
+        token: "{{ ADMIN_TOKEN }}"
+        state: present
+      with_items:
         - { name: admin, password: "{{ ADMIN_PASS }}", tenant: admin }
         - { name: demo, password: "{{ DEMO_PASS }}", tenant: demo }
         - { name: glance, password: "{{ GLANCE_PASS }}", tenant: service }
         - { name: neutron, password: "{{ NEUTRON_PASS }}", tenant: service }
         - { name: nova, password: "{{ NOVA_PASS }}", tenant: service }
-      keystone_roles:
+
+    - name: Add Keystone roles to defined users in defined tenants
+      keystone_user:
+        role: "{{ item.name }}"
+        user: "{{ item.user }}"
+        tenant: "{{ item.tenant }}"
+        endpoint: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME }}:{{ KEYSTONE_ADMIN_PORT }}/v2.0"
+        token: "{{ ADMIN_TOKEN }}"
+        state: present
+      with_items:
         - { name: admin, user: admin, tenant: admin }
         - { name: _member_, user: demo, tenant: demo  }
         - { name: admin, user: glance, tenant: service  }
         - { name: admin, user: neutron, tenant: service  }
         - { name: admin, user: nova, tenant: service  }
-      keystone_services:
+
+    - name: Create Keystone services
+      os_keystone_service:
+        name: "{{ item.name }}"
+        service_type: "{{ item.service_type }}"
+        description: "{{ item.description|default('Not provided') }}"
+        state: present
+        cloud: "envvars"
+      with_items:
         - { name: keystone, service_type: identity }
         - { name: glance, service_type: image }
         - { name: neutron, service_type: network }
         - { name: nova, service_type: compute }
-      keystone_endpoints:
+      environment:
+          OS_AUTH_TYPE: "token_endpoint"
+          OS_ENDPOINT: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME }}:{{ KEYSTONE_ADMIN_PORT }}/v2.0"
+          OS_TOKEN: "{{ ADMIN_TOKEN }}"
+
+    - name: Create Keystone endpoints
+      os_keystone_endpoint:
+        service_name: "{{ item.service_name }}"
+        region: "{{ item.region|default(None) }}"
+        public_url: "{{ item.public_url }}"
+        internal_url: "{{ item.internal_url }}"
+        admin_url: "{{ item.admin_url }}"
+        state: present
+        cloud: "envvars"
+      with_items:
         - service_name: keystone
           public_url: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME }}:{{ KEYSTONE_PORT }}/v2.0"
           internal_url: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME }}:{{ KEYSTONE_PORT }}/v2.0"
@@ -109,17 +136,10 @@
           public_url: "{{ NOVA_API_PROTOCOL }}://{{ NOVA_API_HOSTNAME }}:{{ NOVA_API_PORT }}/v2/%(tenant_id)s"
           internal_url: "{{ NOVA_API_PROTOCOL }}://{{ NOVA_API_HOSTNAME }}:{{ NOVA_API_PORT }}/v2/%(tenant_id)s"
           admin_url: "{{ NOVA_API_PROTOCOL }}://{{ NOVA_API_HOSTNAME }}:{{ NOVA_API_PORT }}/v2/%(tenant_id)s"
-
-
-    - role: runit
-      runit_services:
-        - name: keystone
-          command: |
-            start-stop-daemon --start --chuid keystone \
-              --chdir /var/lib/keystone --name keystone \
-              --exec /usr/bin/keystone-all
-          state: stopped
-
+      environment:
+          OS_AUTH_TYPE: "token_endpoint"
+          OS_ENDPOINT: "{{ KEYSTONE_PROTOCOL }}://{{ KEYSTONE_HOSTNAME }}:{{ KEYSTONE_ADMIN_PORT }}/v2.0"
+          OS_TOKEN: "{{ ADMIN_TOKEN }}"
   tags:
     - keystone
     - controller

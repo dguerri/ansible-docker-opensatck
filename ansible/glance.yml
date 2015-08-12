@@ -22,20 +22,15 @@
 
   tasks:
     - name: Start Glance container
-      docker: >
-        image=openstack-base-image
-        name=glance
-        hostname={{ GLANCE_HOSTNAME }}
-        expose={{ GLANCE_PORT }}
-        ports=0.0.0.0:{{ GLANCE_PORT }}:{{ GLANCE_PORT }}
-        detach=yes
-        tty=yes
-        docker_url={{ docker_host }}
-#        use_tls=verify
-#        tls_client_cert=../.docker/cert.pem
-#        tls_client_key=../.docker/key.pem
-#        tls_ca_cert=../.docker/ca.pem
-#        tls_hostname=boot2docker
+      docker:
+        image: openstack-base-image
+        name: glance
+        hostname: {{ GLANCE_HOSTNAME }}
+        expose: {{ GLANCE_PORT }}
+        ports: 0.0.0.0:{{ GLANCE_PORT }}:{{ GLANCE_PORT }}
+        detach: yes
+        tty: yes
+        docker_url: {{ docker_host }}
 
     - name: Add Keystone host to inventory
       add_host: name=glance

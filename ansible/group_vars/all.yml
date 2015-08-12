@@ -1,7 +1,6 @@
 ---
 
 # Common
-
 DOMAIN_NAME: "os-in-a-box"
 AUTODNS_NAME: "autodns.{{ DOMAIN_NAME }}"
 
@@ -9,15 +8,19 @@ AUTODNS_NAME: "autodns.{{ DOMAIN_NAME }}"
 DATABASE_HOSTNAME: "mysql.{{ DOMAIN_NAME }}"
 
 MYSQL_ROOT: "aexigheefeiph6hae3Ke"
+
 MYSQL_KEYSTONE_DB: "keystone"
 MYSQL_KEYSTONE_USER: "keystone"
 MYSQL_KEYSTONE_PASS: "ahleisheeW0va4datush"
+
 MYSQL_GLANCE_DB: "glance"
 MYSQL_GLANCE_USER: "glance"
 MYSQL_GLANCE_PASS: "aiChohgailangaeBoo0V"
+
 MYSQL_NEUTRON_DB: "neutron"
 MYSQL_NEUTRON_USER: "neutron"
 MYSQL_NEUTRON_PASS: "mahxieJahku9teihie4o"
+
 MYSQL_NOVA_DB: "nova"
 MYSQL_NOVA_USER: "nova"
 MYSQL_NOVA_PASS: "peeh7shuy8Iesh8Ce5aj"
