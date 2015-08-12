@@ -1,4 +1,4 @@
-CONTAINERS := keystone glance nova-api nova-conductor neutron-server
+CONTAINERS := os-base-image
 CLEAN_JOBS := $(addprefix clean-,${CONTAINERS})
 BUILD_JOBS := $(addprefix build-,${CONTAINERS})
 

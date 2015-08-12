@@ -3,6 +3,7 @@
 # Common
 DOMAIN_NAME: "os-in-a-box"
 AUTODNS_NAME: "autodns.{{ DOMAIN_NAME }}"
+OSINABOX_VERSION: 0.1
 
 # MySQL
 DATABASE_HOSTNAME: "mysql.{{ DOMAIN_NAME }}"

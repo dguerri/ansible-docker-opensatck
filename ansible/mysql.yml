@@ -18,53 +18,54 @@
 #
 
 - name: Start up MySQL docker container
-  hosts: docker-server
+  hosts: localhost
 
   tasks:
     - name: Start MySQL container
-      become: yes
       docker:
-        image: mysql:5.6
-        name: "{{ DATABASE_HOSTNAME }}"
+        image: dguerri/os-base-image
+        name: mysql-configuration
         hostname: "{{ DATABASE_HOSTNAME }}"
         expose: 3306
         detach: yes
         tty: yes
-        env:
-          MYSQL_ROOT_PASSWORD: "{{ MYSQL_ROOT }}"
-
-    - name: Wait MySQL server
-      wait_for:
-        host: "{{ DATABASE_HOSTNAME }}"
-        port: 3306
+        command: bash
         state: started
 
-    - name: Add OpenStack Databases
-      mysql_db:
-        name: "{{ item }}"
-        collation: "utf8_general_ci"
-        encoding: "utf8"
-        state: present
-        login_user: root
-        login_password: "{{ MYSQL_ROOT }}"
-        login_host: "{{ DATABASE_HOSTNAME }}"
-      with_items:
-        - "{{ MYSQL_KEYSTONE_DB }}"
-        - "{{ MYSQL_GLANCE_DB }}"
-        - "{{ MYSQL_NEUTRON_DB }}"
-        - "{{ MYSQL_NOVA_DB }}"
+    - name: Add MySQL host to inventory
+      add_host: name=mysql-configuration
 
-    - name: Add OpenStack Users
-      mysql_user:
-        name: "{{ item.name }}"
-        password: "{{ item.pass }}"
-        priv: "{{ item.priv }}"
-        host: "{{ item.host }}"
-        state: present
-        login_user: root
-        login_password: "{{ MYSQL_ROOT }}"
-        login_host: "{{ DATABASE_HOSTNAME }}"
-      with_items:
+  tags:
+    - mysql
+    - controller
+
+
+- name: Configure MySQL
+  hosts: mysql-configuration
+  connection: docker
+
+  roles:
+    - role: mysql
+      mysql_current_root_password: ""
+      mysql_root_password: "{{ MYSQL_ROOT }}"
+      mysql_bind_address: 0.0.0.0
+      mysql_character_set_server: "utf8"
+      mysql_collation_server: "utf8_general_ci"
+      mysql_innodb_file_per_table: "innodb_file_per_table"
+      mysql_databases:
+        - name: "{{ MYSQL_KEYSTONE_DB }}"
+          collation: "utf8_general_ci"
+          encoding: "utf8"
+        - name: "{{ MYSQL_GLANCE_DB }}"
+          collation: "utf8_general_ci"
+          encoding: "utf8"
+        - name: "{{ MYSQL_NEUTRON_DB }}"
+          collation: "utf8_general_ci"
+          encoding: "utf8"
+        - name: "{{ MYSQL_NOVA_DB }}"
+          collation: "utf8_general_ci"
+          encoding: "utf8"
+      mysql_users:
         - name: "{{ MYSQL_KEYSTONE_USER }}"
           pass: "{{ MYSQL_KEYSTONE_PASS }}"
           priv: "{{ MYSQL_KEYSTONE_DB }}.*:ALL"
@@ -85,3 +86,19 @@
   tags:
     - mysql
     - controller
+
+
+- name: Stop MySQL docker container
+  hosts: localhost
+
+  tasks:
+    - name: Kill MySQL container
+      docker:
+        image: dguerri/os-base-image
+        name: mysql-configuration
+        state: killed
+
+    - name: Commit MySQL container
+      exec: "docker commit mysql-configuration os-mysql:{{ OSINABOX_VERSION }}"
+
+/usr/bin/mysqld_safe

@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# Ugly hack to avoid installing rabbitmq on the Docker server
-
-docker exec -it "rabbitmq.os-in-a-box" rabbitmqctl "$@"

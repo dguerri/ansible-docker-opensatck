@@ -17,19 +17,15 @@
 # limitations under the License.
 #
 
-# Docker server
-
-- include: docker_server.yml
-
 # Controller
 
 - include: autodns.yml
 
 - include: mysql.yml
 
-- include: rabbitmq.yml
-
-- include: keystone.yml
+#- include: rabbitmq.yml
+#
+#- include: keystone.yml
 #
 # - include: glance.yml
 #

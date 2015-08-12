@@ -1,9 +1,3 @@
-[submodule "roles/ansible-playbook-rabbitmq"]
-	path = roles/ansible-playbook-rabbitmq
-	url = https://github.com/Mayeu/ansible-playbook-rabbitmq.git
-[submodule "ansible/provision/roles/ansible-playbook-rabbitmq"]
-	path = ansible/provision/roles/ansible-playbook-rabbitmq
-	url = https://github.com/Mayeu/ansible-playbook-rabbitmq.git
-[submodule "ansible/roles/ansible-playbook-rabbitmq"]
-	path = ansible/roles/ansible-playbook-rabbitmq
-	url = https://github.com/Mayeu/ansible-playbook-rabbitmq.git
+[submodule "ansible/roles/mysql"]
+	path = ansible/roles/mysql
+	url = https://github.com/ANXS/mysql.git
