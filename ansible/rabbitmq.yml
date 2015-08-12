@@ -22,19 +22,13 @@
 
   tasks:
     - name: start rabbitmq container
-      docker: >
-        image=base-image
-        name=rabbitmq
-        hostname={{ AMQP_HOSTNAME }}
-        expose=5672
-        detach=yes
-        tty=yes
-        docker_url=tcp://{{ docker_host_ip }}:2375
-#        use_tls=verify
-#        tls_client_cert=../.docker/cert.pem
-#        tls_client_key=../.docker/key.pem
-#        tls_ca_cert=../.docker/ca.pem
-#        tls_hostname=boot2docker
+      docker:
+        image: dguerri/os-base-image
+        name: rabbitmq
+        hostname: "{{ AMQP_HOSTNAME }}"
+        expose: 5672
+        detach: yes
+        tty: yes
 
     - name: Add RabbitMQ host to inventory
       add_host: name=rabbitmq
@@ -48,24 +42,20 @@
   hosts: rabbitmq
   connection: docker
 
-  pre_tasks:
-    - name: Update apt cache
-      apt: update_cache=yes cache_valid_time=7200
-
   roles:
     - role: rabbitmq
       rabbitmq_conf_tcp_listeners_address: 0.0.0.0
       rabbitmq_os_package: true
       rabbitmq_ssl: false
       rabbitmq_users_definitions:
-        - vhost   : /
-          user    : openstack-glance
+        - vhost: /
+          user: openstack-glance
           password: "{{ RABBIT_GLANCE_PASS }}"
-        - vhost   : /
-          user    : openstack-nova
+        - vhost: /
+          user: openstack-nova
           password: "{{ RABBIT_NOVA_PASS }}"
-        - vhost   : /
-          user    : openstack-neutron
+        - vhost: /
+          user: openstack-neutron
           password: "{{ RABBIT_NEUTRON_PASS }}"
 
     - role: runit

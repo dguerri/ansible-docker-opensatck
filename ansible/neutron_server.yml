@@ -22,23 +22,18 @@
 
   tasks:
     - name: Start Neutron Server container
-      docker: >
-        image=base-image
-        name=neutron-server
-        hostname={{ NEUTRON_SERVER_HOSTNAME }}
-        expose={{ NEUTRON_PORT }}
-        ports=0.0.0.0:{{ NEUTRON_PORT }}:{{ NEUTRON_PORT }}
-        detach=yes
-        tty=yes
-        docker_url=tcp://{{ docker_host_ip }}:2375
-#        use_tls=verify
-#        tls_client_cert=../.docker/cert.pem
-#        tls_client_key=../.docker/key.pem
-#        tls_ca_cert=../.docker/ca.pem
-#        tls_hostname=boot2docker
+      docker:
+        image: dguerri/os-base-image
+        name: neutron-server
+        hostname: "{{ NEUTRON_SERVER_HOSTNAME }}"
+        expose: "{{ NEUTRON_PORT }}"
+        ports: "0.0.0.0:{{ NEUTRON_PORT }}:{{ NEUTRON_PORT }}"
+        detach: yes
+        tty: yes
 
     - name: Add Keystone host to inventory
       add_host: name=neutron-server
+
   tags:
     - neutron_server
     - controller
@@ -49,19 +44,16 @@
   connection: docker
 
   pre_tasks:
-    - name: Update apt cache
-      apt: update_cache=yes cache_valid_time=7200
-
     - name: install python-mysqldb
       apt: name="python-mysqldb" state=present
 
     - name: Provide a fake SysV init script for configuring Neutron Server
-      copy: >
-        src=files/neutron-server
-        dest=/etc/init.d/neutron-server
-        owner=root
-        group=root
-        mode=0755
+      copy:
+        src: files/neutron-server
+        dest: /etc/init.d/neutron-server
+        owner: root
+        group: root
+        mode: 0755
 
   roles:
     - role: openstack-neutron_server
@@ -88,6 +80,7 @@
               --chdir /var/lib/neutron-server --name neutron-server \
               --exec /usr/bin/neutron-server
           state: stopped
+
   tags:
     - neutron_server
     - controller

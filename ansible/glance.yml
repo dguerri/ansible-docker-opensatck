@@ -22,23 +22,18 @@
 
   tasks:
     - name: Start Glance container
-      docker: >
-        image=base-image
-        name=glance
-        hostname={{ GLANCE_HOSTNAME }}
-        expose={{ GLANCE_PORT }}
-        ports=0.0.0.0:{{ GLANCE_PORT }}:{{ GLANCE_PORT }}
-        detach=yes
-        tty=yes
-        docker_url=tcp://{{ docker_host_ip }}:2375
-#        use_tls=verify
-#        tls_client_cert=../.docker/cert.pem
-#        tls_client_key=../.docker/key.pem
-#        tls_ca_cert=../.docker/ca.pem
-#        tls_hostname=boot2docker
+      docker:
+        image: dguerri/os-base-image
+        name: glance
+        hostname: "{{ GLANCE_HOSTNAME }}"
+        expose: "{{ GLANCE_PORT }}"
+        ports: "0.0.0.0:{{ GLANCE_PORT }}:{{ GLANCE_PORT }}"
+        detach: yes
+        tty: yes
 
     - name: Add Keystone host to inventory
       add_host: name=glance
+
   tags:
     - glance
     - controller
@@ -49,19 +44,16 @@
   connection: docker
 
   pre_tasks:
-    - name: Update apt cache
-      apt: update_cache=yes cache_valid_time=7200
-
     - name: install python-mysqldb
       apt: name="python-mysqldb" state=present
 
     - name: Provide a fake SysV init script for configuring Glance
-      copy: >
-        src={{ item.src }}
-        dest={{ item.dest }}
-        owner=root
-        group=root
-        mode=0755
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: root
+        group: root
+        mode: 0755
       with_items:
         - { src: files/glance-api , dest: /etc/init.d/glance-api }
         - { src: files/glance-registry , dest: /etc/init.d/glance-registry }
@@ -91,6 +83,7 @@
               --chdir /var/lib/glance --name glance-registry \
               --exec /usr/bin/glance-registry
           state: stopped
+          
   tags:
     - glance
     - controller

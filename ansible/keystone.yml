@@ -22,24 +22,18 @@
 
   tasks:
     - name: Start Keystone container
-      docker: >
-        image=base-image
-        name=keystone
-        hostname={{ KEYSTONE_HOSTNAME }}
-        expose={{ KEYSTONE_PORT }},{{ KEYSTONE_ADMIN_PORT }}
-        ports=0.0.0.0:{{ KEYSTONE_PORT }}:{{ KEYSTONE_PORT }},0.0.0.0:{{ KEYSTONE_ADMIN_PORT }}:{{ KEYSTONE_ADMIN_PORT }}
-        detach=yes
-        tty=yes
-        docker_url=tcp://{{ docker_host_ip }}:2375
-#        use_tls=verify
-#        tls_client_cert=../.docker/cert.pem
-#        tls_client_key=../.docker/key.pem
-#        tls_ca_cert=../.docker/ca.pem
-#        tls_hostname=boot2docker
+      docker:
+        image: dguerri/os-base-image
+        name: keystone
+        hostname: "{{ KEYSTONE_HOSTNAME }}"
+        expose: "{{ KEYSTONE_PORT }},{{ KEYSTONE_ADMIN_PORT }}"
+        ports: "0.0.0.0:{{ KEYSTONE_PORT }}:{{ KEYSTONE_PORT }},0.0.0.0:{{ KEYSTONE_ADMIN_PORT }}:{{ KEYSTONE_ADMIN_PORT }}"
+        detach: yes
+        tty: yes
 
     - name: Add Keystone host to inventory
       add_host: name=keystone
-
+      
   tags:
     - keystone
     - controller
@@ -50,19 +44,16 @@
   connection: docker
 
   pre_tasks:
-    - name: Update apt cache
-      apt: update_cache=yes cache_valid_time=7200
-
     - name: install python-mysqldb
       apt: name="python-mysqldb" state=present
 
     - name: Provide a fake SysV init script for configuring keystone
-      copy: >
-        src=files/keystone
-        dest=/etc/init.d/keystone
-        owner=root
-        group=root
-        mode=0755
+      copy:
+        src: files/keystone
+        dest: /etc/init.d/keystone
+        owner: root
+        group: root
+        mode: 0755
 
   roles:
     - role: openstack-keystone

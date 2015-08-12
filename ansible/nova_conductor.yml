@@ -22,19 +22,13 @@
 
   tasks:
     - name: Start Nova Conductor container
-      docker: >
-        image=base-image
-        name=nova-conductor
-        hostname={{ NOVA_API_HOSTNAME }}
-        privileged=yes
-        detach=yes
-        tty=yes
-        docker_url=tcp://{{ docker_host_ip }}:2375
-#        use_tls=verify
-#        tls_client_cert=../.docker/cert.pem
-#        tls_client_key=../.docker/key.pem
-#        tls_ca_cert=../.docker/ca.pem
-#        tls_hostname=boot2docker
+      docker:
+        image: dguerri/os-base-image
+        name: nova-conductor
+        hostname: "{{ NOVA_API_HOSTNAME }}"
+        privileged: yes
+        detach: yes
+        tty: yes
 
     - name: Add Nova Conductor host to inventory
       add_host: name=nova-conductor
@@ -48,19 +42,16 @@
   connection: docker
 
   pre_tasks:
-    - name: Update apt cache
-      apt: update_cache=yes cache_valid_time=7200
-
     - name: install python-mysqldb
       apt: name="python-mysqldb" state=present
 
     - name: Provide a fake SysV init script for configuring nova-conductor
-      copy: >
-        src=files/nova-conductor
-        dest=/etc/init.d/nova-conductor
-        owner=root
-        group=root
-        mode=0755
+      copy:
+        src: files/nova-conductor
+        dest: /etc/init.d/nova-conductor
+        owner: root
+        group: root
+        mode: 0755
 
   roles:
     - role: openstack-nova_conductor

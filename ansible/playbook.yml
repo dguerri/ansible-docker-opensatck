@@ -35,7 +35,7 @@
 
 - include: nova_api.yml
 
-- include: horizon.yml
+#- include: horizon.yml
 
 # Network controller
 
